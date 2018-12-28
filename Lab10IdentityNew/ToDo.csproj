@@ -356,6 +356,7 @@
     <Content Include="Views\Activities\Details.cshtml" />
     <Content Include="Views\Activities\Edit.cshtml" />
     <Content Include="Views\Activities\Index.cshtml" />
+    <Content Include="Views\Teams\YourTeams.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

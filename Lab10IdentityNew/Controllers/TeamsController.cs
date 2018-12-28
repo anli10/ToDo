@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -6,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using ToDo.Models;
 using ToDo.ViewModel;
 
@@ -17,11 +20,27 @@ namespace ToDo.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Teams
-        public ActionResult Index()
+        
+       public ActionResult Index()
         {
-            return View(db.Teams.ToList());
-        }
+            //var userId = User.Identity.GetUserId();
+           // ApplicationUser user = db.Users.Find(userId);
+            //var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            //string[] roles = userManager.Roles.GetRolesForUser(user.UserName);
 
+            if (User.IsInRole("Editor") ||User.IsInRole("User"))
+            {
+                return RedirectToAction("YourTeams", "Teams");
+            }
+            else
+                return View(db.Teams.ToList());
+        }
+        public ActionResult YourTeams()
+        {
+            var userId = User.Identity.GetUserId();
+
+            return View(db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).ToList());
+        }
         // GET: Teams/Details/5
         public ActionResult Details(int? id)
         {
@@ -30,11 +49,24 @@ namespace ToDo.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Team team = db.Teams.Find(id);
-            if (team == null)
+
+            var userId = User.Identity.GetUserId();
+            var teamsId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id);
+            var projects = from proj in db.Projects
+                           where id == proj.TeamId
+                           select proj;
+
+            team.Projects = projects.ToList();
+            if (User.IsInRole("Administrator") )
+            {
+                return View(team);
+            }
+            else if (team == null || !teamsId.ToList().Contains(team.Id) )
             {
                 return HttpNotFound();
             }
             return View(team);
+
         }
 
         // GET: Teams/Create
@@ -94,13 +126,13 @@ namespace ToDo.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            var userId = User.Identity.GetUserId();
+            var teamsId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id);
             var teamViewMode = new TeamViewMode
             {
                 Team = db.Teams.Include(i => i.ApplicationUsers).First(i => i.Id == id)
             };
 
-            if (teamViewMode.Team == null)
-                return HttpNotFound();
             var allUsers = db.Users.ToList();
 
             teamViewMode.AllUsers = allUsers.Select(x => new SelectListItem
@@ -108,6 +140,14 @@ namespace ToDo.Controllers
                 Text = x.UserName,
                 Value = x.Id
             });
+            if (User.IsInRole("Administrator"))
+            {
+                return View(teamViewMode);
+            }
+            else if (teamViewMode == null || !teamsId.ToList().Contains(teamViewMode.Team.Id))
+            {
+                return HttpNotFound();
+            }
 
             return View(teamViewMode);
         }

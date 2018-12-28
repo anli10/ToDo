@@ -15,7 +15,7 @@ namespace ToDo
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             //Database.SetInitializer<ApplicationDbContext>(
-             //  new DropCreateDatabaseAlways<ApplicationDbContext>());
+              // new DropCreateDatabaseAlways<ApplicationDbContext>());
             //Database.SetInitializer<ApplicationDbContext>(new DropCreateDatabaseIfModelChanges<ApplicationDbContext>());
         }
     }

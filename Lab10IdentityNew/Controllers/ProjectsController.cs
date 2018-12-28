@@ -21,9 +21,13 @@ namespace ToDo.Controllers
         public ActionResult Index()
         {
             var userId = User.Identity.GetUserId();
-            var teamId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id).First();
-            var projects = db.Projects.Include(p => p.Team).Where(p => p.Team.Id == teamId);
+            var teamsId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id);
+            var projects = from proj in db.Projects
+                           orderby proj.Team.Id
+                           where teamsId.Contains(proj.Team.Id)
+                           select proj;
             return View(projects.ToList());
+           
         }
         // GET: Projects/Details/5
         [Authorize(Roles = "User,Editor,Administrator")]
@@ -35,12 +39,13 @@ namespace ToDo.Controllers
             }
 
             var userId = User.Identity.GetUserId();
-            var teamId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id).First();
-            var projects = db.Projects.Include(p => p.Team).Where(p => p.Team.Id == teamId);
-
+            var teamsId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id);
+            var projects = from proj in db.Projects
+                           orderby proj.Team.Id
+                           where teamsId.Contains(proj.Team.Id)
+                           select proj;
 
             Project project = db.Projects.Find(id);
-
             if (project == null || !projects.Select(p => p.Id).Contains(project.Id))
             {
                 return HttpNotFound();
@@ -53,7 +58,9 @@ namespace ToDo.Controllers
         // GET: Projects/Create
         [Authorize(Roles = "User,Editor,Administrator")]
         public ActionResult Create()
-        {  
+        {
+            var userId = User.Identity.GetUserId();
+            ViewBag.TeamId = new SelectList(db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)), "Id", "Name");
             return View();
         }
 
@@ -67,9 +74,12 @@ namespace ToDo.Controllers
         public ActionResult Create([Bind(Include = "Id,Name,Description,TeamId,EditorId")] Project project)
         {
             var userId = User.Identity.GetUserId();
-            var teamId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id).First();
-            ViewBag.TeamId = teamId;
-            project.TeamId = teamId;
+            var teamsId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id);
+            var projects = from proj in db.Projects
+                           orderby proj.Team.Id
+                           where teamsId.Contains(proj.Team.Id)
+                           select proj;
+            ViewBag.TeamId = teamsId;
             project.EditorId = userId;
 
             ApplicationUser user = db.Users.Find(userId);
@@ -109,11 +119,16 @@ namespace ToDo.Controllers
             }
 
             Project project = db.Projects.Find(id);
+
             var userId = User.Identity.GetUserId();
-            var teamId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id).First();
-            ViewBag.TeamId = teamId;
-            project.TeamId = teamId;
-            var projects = db.Projects.Include(p => p.Team).Where(p => p.Team.Id == teamId);
+            var teamsId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id);
+            var projects = from proj in db.Projects
+                           orderby proj.Team.Id
+                           where teamsId.Contains(proj.Team.Id)
+                           select proj;
+
+            ViewBag.TeamId = new SelectList(db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)), "Id", "Name");
+
 
             if (project == null || !projects.Select(p => p.Id).Contains(project.Id))
             {
