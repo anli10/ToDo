@@ -33,18 +33,11 @@
                 @Html.DisplayNameFor(model => model.Projects)
             </dt>
                 @{
-                 foreach (var proj in Model.Projects)
-                 {
+                    foreach (var proj in Model.Projects)
+                    {
                     <text>@proj.Name</text>
+                        }
                     }
-                }
-            @*<dd>
-            @foreach (var project in Model.Projects)
-            {
-                @Html.DisplayFor(model => project)
-            }
-        </dd>*@
-
         </dl>
     </div>
     <p>

@@ -37,6 +37,7 @@ namespace ToDo.Models
 
         public virtual DbSet<Project> Projects{ get; set; }
         public virtual DbSet<Activity> Activities { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
 
 
