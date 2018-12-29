@@ -1,48 +1,38 @@
 ﻿@model ToDo.Models.Team
 
 @{
-    Layout = null;
+    // Layout = null;
 }
 
-<!DOCTYPE html>
+<div>
+    <h4>Team</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
-    <div>
-        <h4>Team</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.ApplicationUsers)
-            </dt>
-            <dd>
-                @Html.ListBox("Id", new SelectList(Model.ApplicationUsers, "Id", "UserName"))
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.Projects)
-            </dt>
-                @{
-                    foreach (var proj in Model.Projects)
-                    {
-                    <text>@proj.Name</text>
-                        }
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUsers)
+        </dt>
+        <dd>
+            @Html.ListBox("Id", new SelectList(Model.ApplicationUsers, "Id", "UserName"))
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Projects)
+        </dt>
+            @{
+                foreach (var proj in Model.Projects)
+                {
+                <text>@proj.Name</text>
                     }
-        </dl>
-    </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-</body>
-</html>
+                }
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

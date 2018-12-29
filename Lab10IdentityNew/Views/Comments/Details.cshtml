@@ -1,50 +1,40 @@
 ﻿@model ToDo.Models.Comment
 
 @{
-    Layout = null;
+    // Layout = null;
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
-    <div>
-        <h4>Comment</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.User.Email)
-            </dt>
+<div>
+    <h4>Comment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Email)
+        </dt>
     
-            <dd>
-                @Html.DisplayFor(model => model.User.Email)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.User.Email)
+        </dd>
     
-            <dt>
-                @Html.DisplayNameFor(model => model.Text)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
     
-            <dd>
-                @Html.DisplayFor(model => model.Text)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Text)
+        </dd>
     
-            <dt>
-                @Html.DisplayNameFor(model => model.ActivityId)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.ActivityId)
+        </dt>
     
-            <dd>
-                @Html.DisplayFor(model => model.ActivityId)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.ActivityId)
+        </dd>
     
-        </dl>
-    </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-</body>
-</html>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
