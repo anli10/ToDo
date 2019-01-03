@@ -18,8 +18,21 @@ namespace Lab10IdentityNew.Controllers
         // GET: Activities
         public ActionResult Index()
         {
-            var activities = db.Activities.Include(a => a.Project);
-            return View(activities.ToList());
+            if (User.IsInRole("Administrator"))
+            {
+                var activities = db.Activities.Include(a => a.Project);
+                return View(activities.ToList());
+            }
+            else if (User.IsInRole("Editor") || User.IsInRole("User"))
+            {
+                var userId = User.Identity.GetUserId();
+
+                return View(db.Activities.Where(t => t.UserId.Contains(userId)).ToList());
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
         // GET: Activities/Details/5

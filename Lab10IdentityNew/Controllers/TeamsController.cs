@@ -28,12 +28,18 @@ namespace ToDo.Controllers
             //var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
             //string[] roles = userManager.Roles.GetRolesForUser(user.UserName);
 
-            if (User.IsInRole("Editor") ||User.IsInRole("User"))
+            if (User.IsInRole("Editor") || User.IsInRole("User"))
             {
                 return RedirectToAction("YourTeams", "Teams");
             }
-            else
+            else if (User.IsInRole("Administrator"))
+            {
                 return View(db.Teams.ToList());
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
         public ActionResult YourTeams()
         {
