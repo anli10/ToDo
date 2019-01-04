@@ -1,0 +1,11 @@
+﻿html, body {
+    height: 100%;
+}
+.navbar-custom {
+    background-color: #779e73;
+}
+
+.content-layer {
+    min-height: 100%;
+    background-color: rgba(205, 214, 221, 0.5);
+}
