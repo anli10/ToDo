@@ -44,6 +44,9 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-secondary" })
+    }
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
 </p>

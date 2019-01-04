@@ -16,23 +16,26 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ApplicationUsers)
+            Members
         </dt>
         <dd>
-            @Html.ListBox("Id", new SelectList(Model.ApplicationUsers, "Id", "UserName"))
+            @Html.ListBox("Id", new SelectList(Model.ApplicationUsers, "Id", "UserName"), htmlAttributes: new { @class = "listbox-custom" })
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Projects)
         </dt>
-            @{
-                foreach (var proj in Model.Projects)
-                {
-                <text>@proj.Name</text>
-                    }
-                }
+        @{
+            foreach (var proj in Model.Projects)
+            {
+            <text>@proj.Name</text>
+            }
+         }
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-secondary" })
+    }
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
 </p>
