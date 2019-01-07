@@ -54,6 +54,11 @@ namespace Lab10IdentityNew.Controllers
         public ActionResult Create()
         {
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
+
+            var userId = User.Identity.GetUserId();
+            var teamId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id).First();
+            ViewBag.UserId = new SelectList(db.Users.Where(u => u.Teams.FirstOrDefault().Id == teamId), "Id", "UserName");
+
             return View();
         }
 
@@ -62,15 +67,17 @@ namespace Lab10IdentityNew.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Description,StartDate,EndDate,ProjectId")] Activity activity)
+        public ActionResult Create([Bind(Include = "Id,Title,Description,StartDate,EndDate,ProjectId,UserId,Status")] Activity activity)
         {
+            var userId = User.Identity.GetUserId();
+            var teamId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id).First();
             if (ModelState.IsValid)
             {
                 db.Activities.Add(activity);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.UserId = new SelectList(db.Users.Where(u => u.Teams.FirstOrDefault().Id == teamId), "Id", "UserName", activity.UserId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", activity.ProjectId);
             return View(activity);
         }
