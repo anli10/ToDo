@@ -10,6 +10,8 @@ using ToDo.Models;
 
 namespace ToDo.Controllers
 {
+    [Authorize(Roles = "User,Editor,Administrator")]
+
     public class CommentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

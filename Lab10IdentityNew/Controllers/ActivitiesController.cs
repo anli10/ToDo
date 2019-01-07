@@ -11,11 +11,14 @@ using ToDo.Models;
 
 namespace Lab10IdentityNew.Controllers
 {
+    [Authorize(Roles = "User,Editor,Administrator")]
+
     public class ActivitiesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Activities
+
         public ActionResult Index()
         {
             if (User.IsInRole("Administrator"))

@@ -15,6 +15,8 @@ using ToDo.ViewModel;
 
 namespace ToDo.Controllers
 {
+    [Authorize(Roles = "User,Editor,Administrator")]
+
     public class TeamsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

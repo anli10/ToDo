@@ -60,8 +60,12 @@ namespace ToDo.Controllers
         public ActionResult Create()
         {
             var userId = User.Identity.GetUserId();
-            ViewBag.TeamId = new SelectList(db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)), "Id", "Name");
-            return View();
+            var teams = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId));
+            if (teams.Count() > 0) {
+                ViewBag.TeamId = new SelectList(db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)), "Id", "Name");
+                return View();
+            }
+            else return View("ErrorYouMustBeInaTeam");
         }
 
         // POST: Projects/Create
