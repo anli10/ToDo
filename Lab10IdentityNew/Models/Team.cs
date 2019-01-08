@@ -20,6 +20,7 @@ namespace ToDo.Models
 
         public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
         public ICollection<Project> Projects { get; set; }
+        public ICollection<Activity> Activities { get; set; }
         //public int[] SelectedUsers { get; set; }
         //public IEnumerable<ApplicationUser> Users { get; set; }
     }

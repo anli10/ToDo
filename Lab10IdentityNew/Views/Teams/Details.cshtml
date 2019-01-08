@@ -27,9 +27,36 @@
         @{
             foreach (var proj in Model.Projects)
             {
-            <text>@proj.Name</text>
+                <text>@proj.Name</text>
             }
          }
+        <dd></dd>
+        <dt>
+            @Html.DisplayNameFor(mode => Model.Activities)
+        </dt>
+        <table class="table table-striped">
+            <thead class="thead-light">
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            @{ 
+                foreach (var activity in Model.Activities)
+                {
+                    <tr>
+                        <td>@activity.Title</td>
+                        <td>@activity.Description</td>
+                        <td>@activity.StartDate</td>
+                        <td>@activity.EndDate</td>
+                        <td>@activity.Status</td>
+                    </tr>
+                }
+            }
+        </table>
     </dl>
 </div>
 <p>

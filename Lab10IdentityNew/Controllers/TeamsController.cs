@@ -63,8 +63,15 @@ namespace ToDo.Controllers
             var projects = from proj in db.Projects
                            where id == proj.TeamId
                            select proj;
+            var projectsId = from proj in db.Projects
+                             where id == proj.TeamId
+                             select proj.Id;
+            var activities = from activity in db.Activities
+                             where projectsId.Contains(activity.ProjectId)
+                             select activity;
 
             team.Projects = projects.ToList();
+            team.Activities = activities.ToList();
             if (User.IsInRole("Administrator") )
             {
                 return View(team);

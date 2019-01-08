@@ -29,8 +29,15 @@ namespace Lab10IdentityNew.Controllers
             else if (User.IsInRole("Editor") || User.IsInRole("User"))
             {
                 var userId = User.Identity.GetUserId();
-
-                return View(db.Activities.Where(t => t.UserId.Contains(userId)).ToList());
+                var teamsId = db.Teams.Where(t => t.ApplicationUsers.Select(i => i.Id).Contains(userId)).Select(t => t.Id);
+                var projectsId = from proj in db.Projects
+                               orderby proj.Team.Id
+                               where teamsId.Contains(proj.Team.Id)
+                               select proj.Id;
+                var activities = from activity in db.Activities
+                                 where projectsId.Contains(activity.ProjectId)
+                                 select activity;
+                return View(activities.ToList());
             }
             else
             {
